@@ -14,7 +14,7 @@ COPY . .
 RUN go build -o script
 
 # Expose the port the script might use (optional, modify if needed)
-EXPOSE 8080
+# EXPOSE 8080
 
 # Run the built Go binary as the entrypoint
 CMD ["./script"]
