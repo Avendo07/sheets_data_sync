@@ -1,5 +1,13 @@
-# Use the official Golang image as the base
-FROM golang:latest
+FROM alpine:latest
+
+RUN apk add --no-cache git make musl-dev go
+
+# Configure Go
+ENV GOROOT /usr/lib/go
+ENV GOPATH /go
+ENV PATH /go/bin:$PATH
+
+RUN mkdir -p ${GOPATH}/src ${GOPATH}/bin
 
 # Set the working directory inside the container
 WORKDIR /app
