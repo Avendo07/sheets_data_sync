@@ -9,17 +9,17 @@ import (
 
 func main() {
 	sheetId := os.Getenv("SHEET_ID")
-	// creds := os.Getenv("SA_JSON")
-	creds, err := os.ReadFile("client_secret.json")
-	if err != nil {
+	creds := os.Getenv("SA_JSON")
+	// creds, err := os.ReadFile("client_secret.json")
+	/*if err != nil {
 		log.Fatalf("Unable to read credentials file: %v", err)
-	}
+	}*/
 	sheetName := os.Getenv("DATASHEET_NAME")
 	sheetRange := os.Getenv("DATASHEET_RANGE")
 	var dataRange = sheetName + "!" + sheetRange
 	fmt.Printf("Helo\n")
 	fmt.Printf("Helllo %s %s\n", sheetId, dataRange)
-	resp, err := readSheetData(sheetId, dataRange, creds)
+	resp, err := readSheetData(sheetId, dataRange, []byte(creds))
 	log.Printf("%s %s", resp, err)
 
 	sheetName = "data-store"
