@@ -26,7 +26,7 @@ func main() {
 	sheetRange = "A1:B2"
 	dataRange = sheetName + "!" + sheetRange
 	data := [][]interface{}{{"das", "asd"}, {"2", "dsaasd"}}
-	writeResp, err := writeSheetData(sheetId, dataRange, creds, data)
+	writeResp, err := writeSheetData(sheetId, dataRange, []byte(creds), data)
 	fmt.Printf("%s\n", writeResp)
 
 	payload := map[string]string{
