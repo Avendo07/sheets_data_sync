@@ -81,7 +81,7 @@ func main() {
 	}
 	json, err := json.Marshal(payload)
 	headers := map[string]string{"Content-Type": "application/json", "Authorization": "Bearer " + os.Getenv("API_JWT")}
-	status, err := postCall("ghostfolio.ghostfolio.svc.cluster.local:3333/api/v1/import", []byte(json), headers)
+	status, err := postCall("http://ghostfolio.ghostfolio.svc.cluster.local:3333/api/v1/import", []byte(json), headers)
 	fmt.Printf("%d\n", status)
 }
 
