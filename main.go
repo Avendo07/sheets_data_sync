@@ -54,25 +54,26 @@ func main() {
 	fmt.Printf("Helllo %s %s\n", sheetId, dataRange)
 	resp, err := readSheetData(sheetId, dataRange, []byte(creds))
 	log.Printf("%s %s", resp, err)
+	// entries, err := mapDataToPayload(resp.Values)
 
 	sheetName = "data-store"
 	sheetRange = "A1:B2"
 	dataRange = sheetName + "!" + sheetRange
-	data := [][]interface{}{{"das", "asd"}, {"2", "dsaasd"}}
+	data := [][]interface{}{{"das", "update"}, {"2", "dsaasd"}}
 	writeResp, err := writeSheetData(sheetId, dataRange, []byte(creds), data)
 	fmt.Printf("%s\n", writeResp)
 
 	payload := Payload{
 		Activities: []Activity{
 			{
-				Currency:   USD,
+				Currency:   INR,
 				DataSource: Yahoo,
 				Date:       "2023-09-17T00:00:00.000Z",
-				Fee:        19,
-				Quantity:   5,
-				Symbol:     "MSFT",
+				Fee:        0,
+				Quantity:   resp.Values[0][5].(int),
+				Symbol:     resp.Values[0][0].(string) + ".NS",
 				Type:       Buy,
-				UnitPrice:  298.58,
+				UnitPrice:  resp.Values[0][4].(float64),
 				AccountID:  "4fe741a5-88e2-4c67-9431-8727274387c8",
 				Comment:    nil,
 			},
@@ -84,6 +85,33 @@ func main() {
 	status, err := postCall("http://ghostfolio.ghostfolio.svc.cluster.local:3333/api/v1/import", []byte(json), headers)
 	fmt.Printf("%d\n", status)
 }
+
+/*func mapDataToPayload(data [][]interface{}) (Payload, error) {
+	var payload Payload
+	payload.Activities = make([]Activity, 0) // Initialize empty slice
+
+	for _, row := range data {
+		if len(row) != reflect.TypeOf(Activity{}).Elem().NumField() {
+			return payload, fmt.Errorf("Invalid row length: expected %d, got %d", reflect.TypeOf(Activity{}).Elem().NumField(), len(row))
+		}
+
+		activity := Activity{}
+		for i, element := range row {
+			switch field := reflect.TypeOf(activity).Elem().Field(i); field.Type.Kind() {
+			case reflect.String:
+				reflect.ValueOf(&activity).Elem().Field(i).SetString(element.(string))
+			case reflect.Int:
+				reflect.ValueOf(&activity).Elem().Field(i).SetInt(element.(int64)) // Use int64 for wider range
+			case reflect.Float64:
+				reflect.ValueOf(&activity).Elem().Field(i).SetFloat(element.(float64))
+			default:
+				return payload, fmt.Errorf("Unexpected type for field %s: %v", field.Name, element)
+			}
+		}
+		payload.Activities = append(payload.Activities, activity)
+	}
+	return payload, nil
+}*/
 
 /*func createGhostfolioEntry(ticker string, date string, transType string, quantity int, unitPrice float32) {
 	baseUrl := "ghostfolio.ghostfolio.svc.cluster.local:3333/api/v1/import"

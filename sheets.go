@@ -10,7 +10,7 @@ import (
 	"google.golang.org/api/sheets/v4"
 )
 
-func readSheetData(sheetId string, dataRange string, creds []byte) (any, error) {
+func readSheetData(sheetId string, dataRange string, creds []byte) (*sheets.ValueRange, error) {
 	service, err := getSheetRef(creds)
 	if err != nil {
 		return nil, err
