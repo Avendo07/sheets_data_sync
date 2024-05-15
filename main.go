@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strconv"
 )
 
 type Currency string
@@ -55,6 +56,9 @@ func main() {
 	resp, err := readSheetData(sheetId, dataRange, []byte(creds))
 	log.Printf("%s %s", resp, err)
 	// entries, err := mapDataToPayload(resp.Values)
+	quant, err := strconv.Atoi(resp.Values[0][5].(string))
+	price, err := strconv.ParseFloat(resp.Values[0][4].(string), 64)
+	log.Printf("quant price err: %s %s %s", quant, price, err)
 
 	sheetName = "data-store"
 	sheetRange = "A1:B2"
@@ -70,10 +74,10 @@ func main() {
 				DataSource: Yahoo,
 				Date:       "2023-09-17T00:00:00.000Z",
 				Fee:        0,
-				Quantity:   resp.Values[0][5].(int),
+				Quantity:   quant,
 				Symbol:     resp.Values[0][0].(string) + ".NS",
 				Type:       Buy,
-				UnitPrice:  resp.Values[0][4].(float64),
+				UnitPrice:  price,
 				AccountID:  "4fe741a5-88e2-4c67-9431-8727274387c8",
 				Comment:    nil,
 			},
