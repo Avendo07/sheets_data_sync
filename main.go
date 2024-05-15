@@ -75,7 +75,7 @@ func main() {
 				Date:       "2023-09-17T00:00:00.000Z",
 				Fee:        0,
 				Quantity:   quant,
-				Symbol:     resp.Values[0][0].(string) + ".NS",
+				Symbol:     resp.Values[0][1].(string) + ".NS",
 				Type:       Buy,
 				UnitPrice:  price,
 				AccountID:  "4fe741a5-88e2-4c67-9431-8727274387c8",
