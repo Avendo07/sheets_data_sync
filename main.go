@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 	"strconv"
+	"time"
 )
 
 type Currency string
@@ -58,6 +59,7 @@ func main() {
 	// entries, err := mapDataToPayload(resp.Values)
 	quant, err := strconv.Atoi(resp.Values[0][5].(string))
 	price, err := strconv.ParseFloat(resp.Values[0][4].(string), 64)
+	date, err := isoDate(resp.Values[0][0].(string))
 	log.Printf("quant price err: %s %s %s", quant, price, err)
 
 	sheetName = "data-store"
@@ -84,11 +86,32 @@ func main() {
 			// Add more activity objects here if needed
 		},
 	}
+	status := createGhostfolioEntry(payload)
+	fmt.Printf("Status: %d", status)
+}
+
+func createGhostfolioEntry(payload Payload) int {
 	log.Printf("Payload : %s", payload)
 	json, err := json.Marshal(payload)
 	headers := map[string]string{"Content-Type": "application/json", "Authorization": "Bearer " + os.Getenv("API_JWT")}
 	status, err := postCall("http://ghostfolio.ghostfolio.svc.cluster.local:3333/api/v1/import", []byte(json), headers)
 	fmt.Printf("%d   %s\n", status, err)
+	return status
+}
+
+func isoDate(date string) (string, error) {
+	layout := "02-01-06" // YYYY-MM-DD format
+	parsedDate, err := time.Parse(layout, date)
+
+	// Handle potential parsing errors
+	if err != nil {
+		fmt.Println("Error parsing date:", err)
+		return "", err
+	}
+
+	// Format the parsed date into ISO8601 format
+	isoFormattedDate := parsedDate.Format(time.RFC3339)
+	return isoFormattedDate, nil
 }
 
 /*func mapDataToPayload(data [][]interface{}) (Payload, error) {
