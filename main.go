@@ -84,10 +84,11 @@ func main() {
 			// Add more activity objects here if needed
 		},
 	}
+	log.Printf("Payload : %s", payload)
 	json, err := json.Marshal(payload)
 	headers := map[string]string{"Content-Type": "application/json", "Authorization": "Bearer " + os.Getenv("API_JWT")}
 	status, err := postCall("http://ghostfolio.ghostfolio.svc.cluster.local:3333/api/v1/import", []byte(json), headers)
-	fmt.Printf("%d\n", status)
+	fmt.Printf("%d   %s\n", status, err)
 }
 
 /*func mapDataToPayload(data [][]interface{}) (Payload, error) {
