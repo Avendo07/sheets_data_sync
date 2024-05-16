@@ -111,6 +111,12 @@ func getMkt(company string, mkt string) string {
 	return ticker
 }
 
+func getAction(buyQty int, sellQty int) (string, int, error) {
+	if buyQty != 0 && sellQty == 0 {
+		return Buy, buyQty
+	}
+}
+
 func writeProgressData(data []interface{}) (string, error) {
 	sheetName := "data-store"
 	sheetRange := "A1:B2"
