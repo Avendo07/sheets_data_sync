@@ -50,15 +50,18 @@ func main() {
 		log.Fatalf("Unable to read credentials file: %v", err)
 	}*/
 	sheetName := os.Getenv("DATASHEET_NAME")
-	sheetRange := os.Getenv("DATASHEET_RANGE")
-	var dataRange = sheetName + "!" + sheetRange
+	// sheetRange := os.Getenv("DATASHEET_RANGE")
+	sheetRange, _ := readProgressData()
+	var dataRange = sheetName + "!" + fmt.Sprintf("A%s:H5", string(sheetRange))
+	fmt.Printf("Data Range: %s", dataRange)
 	fmt.Printf("Helo\n")
 	fmt.Printf("Helllo %s %s\n", sheetId, dataRange)
 	resp, err := readSheetData(sheetId, dataRange, []byte(creds))
 	log.Printf("%s %s", resp, err)
 	// entries, err := mapDataToPayload(resp.Values)
+	startPoint, err := readProgressData()
 
-	for _, row := range resp.Values {
+	for index, row := range resp.Values {
 		quant, err := strconv.Atoi(row[5].(string))
 		price, err := strconv.ParseFloat(row[4].(string), 64)
 		date, err := isoDate(row[0].(string))
@@ -88,6 +91,7 @@ func main() {
 		fmt.Print(payload)
 		status := createGhostfolioEntry(payload)
 		fmt.Printf("Status: %d", status)
+		writeProgressData([]interface{}{startPoint + index + 1, status})
 	}
 
 }
@@ -113,6 +117,17 @@ func writeProgressData(data []interface{}) (string, error) {
 	writeResp, err := writeSheetData(sheetId, dataRange, []byte(creds), sheetData)
 	fmt.Printf("%s\n", writeResp)
 	return writeResp, err
+}
+
+func readProgressData() (int, error) {
+	sheetName := "data-store"
+	sheetRange := "A2:B2"
+	dataRange := sheetName + "!" + sheetRange
+	creds := os.Getenv("SA_JSON")
+	sheetId := os.Getenv("SHEET_ID")
+	readResp, err := readSheetData(sheetId, dataRange, []byte(creds))
+	fmt.Printf("%s\n", readResp)
+	return readResp.Values[0][0].(int), err
 }
 
 func createGhostfolioEntry(payload Payload) int {
