@@ -22,7 +22,7 @@ const (
 )
 const (
 	Buy  ActivityType = "BUY"
-	SELL ActivityType = "SELL"
+	Sell ActivityType = "SELL"
 )
 
 type Activity struct {
@@ -63,14 +63,16 @@ func main() {
 	startPoint, err := readProgressData()
 
 	for index, row := range resp.Values {
-		quant, err := strconv.Atoi(row[5].(string))
+		buyQty, err := strconv.Atoi(row[5].(string))
+		sellQty, err := strconv.Atoi(row[6].(string))
+		action, qty := getAction(buyQty, sellQty)
 		price, err := strconv.ParseFloat(row[4].(string), 64)
 		date, err := isoDate(row[0].(string))
 		company, _ := row[1].(string)
 		mkt, _ := row[2].(string)
 		ticker := getMkt(company, mkt)
 
-		log.Printf("quant price date err: %s %s %s %s", quant, price, date, err)
+		log.Printf("quant price date err: %d %s %s %s", qty, price, date, err)
 
 		payload := Payload{
 			Activities: []Activity{
@@ -79,9 +81,9 @@ func main() {
 					DataSource: Yahoo,
 					Date:       date,
 					Fee:        0,
-					Quantity:   quant,
+					Quantity:   qty,
 					Symbol:     ticker,
-					Type:       Buy,
+					Type:       action,
 					UnitPrice:  price,
 					AccountID:  "4fe741a5-88e2-4c67-9431-8727274387c8",
 					Comment:    nil,
@@ -111,9 +113,11 @@ func getMkt(company string, mkt string) string {
 	return ticker
 }
 
-func getAction(buyQty int, sellQty int) (string, int, error) {
+func getAction(buyQty int, sellQty int) (ActivityType, int) {
 	if buyQty != 0 && sellQty == 0 {
 		return Buy, buyQty
+	} else {
+		return Sell, sellQty
 	}
 }
 
