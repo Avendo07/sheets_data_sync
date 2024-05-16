@@ -86,8 +86,8 @@ func main() {
 			},
 		}
 		fmt.Print(payload)
-		// status := createGhostfolioEntry(payload)
-		// fmt.Printf("Status: %d", status)
+		status := createGhostfolioEntry(payload)
+		fmt.Printf("Status: %d", status)
 	}
 
 }
