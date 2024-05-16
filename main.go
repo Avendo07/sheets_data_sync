@@ -127,7 +127,8 @@ func readProgressData() (int, error) {
 	sheetId := os.Getenv("SHEET_ID")
 	readResp, err := readSheetData(sheetId, dataRange, []byte(creds))
 	fmt.Printf("%s\n", readResp)
-	return readResp.Values[0][0].(int), err
+	readValue, _ := strconv.Atoi(readResp.Values[0][0].(string))
+	return readValue, err
 }
 
 func createGhostfolioEntry(payload Payload) int {
