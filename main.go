@@ -53,7 +53,7 @@ func main() {
 	// sheetRange := os.Getenv("DATASHEET_RANGE")
 	sheetRange, err := readProgressData()
 	fmt.Printf("Sheet Range %d %s", sheetRange, err)
-	dataRange := sheetName + "!" + "A" + strconv.Itoa(sheetRange) + ":H5"
+	dataRange := sheetName + "!" + "A" + strconv.Itoa(sheetRange) + ":H"
 	fmt.Printf("Data Range: %s", dataRange)
 	fmt.Printf("Helo\n")
 	fmt.Printf("Helllo %s %s\n", sheetId, dataRange)
