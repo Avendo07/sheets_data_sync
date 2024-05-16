@@ -51,8 +51,8 @@ func main() {
 	}*/
 	sheetName := os.Getenv("DATASHEET_NAME")
 	// sheetRange := os.Getenv("DATASHEET_RANGE")
-	sheetRange, _ := readProgressData()
-	fmt.Printf("Sheet Range%d", sheetRange)
+	sheetRange, err := readProgressData()
+	fmt.Printf("Sheet Range %d %s", sheetRange, err)
 	var dataRange = sheetName + "!" + fmt.Sprintf("A%s:H5", string(sheetRange))
 	fmt.Printf("Data Range: %s", dataRange)
 	fmt.Printf("Helo\n")
