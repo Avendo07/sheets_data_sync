@@ -91,6 +91,9 @@ func main() {
 		}
 		fmt.Print(payload)
 		status := createGhostfolioEntry(payload)
+		if status == 201 {
+			break
+		}
 		fmt.Printf("Status: %d", status)
 		writeProgressData([]interface{}{startPoint + index + 1, status})
 	}
