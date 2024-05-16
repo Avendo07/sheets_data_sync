@@ -57,37 +57,62 @@ func main() {
 	resp, err := readSheetData(sheetId, dataRange, []byte(creds))
 	log.Printf("%s %s", resp, err)
 	// entries, err := mapDataToPayload(resp.Values)
-	quant, err := strconv.Atoi(resp.Values[0][5].(string))
-	price, err := strconv.ParseFloat(resp.Values[0][4].(string), 64)
-	date, err := isoDate(resp.Values[0][0].(string))
-	log.Printf("quant price err: %s %s %s", quant, price, err)
 
-	sheetName = "data-store"
-	sheetRange = "A1:B2"
-	dataRange = sheetName + "!" + sheetRange
-	data := [][]interface{}{{"das", "update"}, {"2", "dsaasd"}}
-	writeResp, err := writeSheetData(sheetId, dataRange, []byte(creds), data)
-	fmt.Printf("%s\n", writeResp)
+	for _, row := range resp.Values {
+		quant, err := strconv.Atoi(row[5].(string))
+		price, err := strconv.ParseFloat(row[4].(string), 64)
+		date, err := isoDate(row[0].(string))
+		company, _ := row[1].(string)
+		mkt, _ := row[2].(string)
+		ticker := getMkt(company, mkt)
 
-	payload := Payload{
-		Activities: []Activity{
-			{
-				Currency:   INR,
-				DataSource: Yahoo,
-				Date:       "2023-09-17T00:00:00.000Z",
-				Fee:        0,
-				Quantity:   quant,
-				Symbol:     resp.Values[0][1].(string) + ".NS",
-				Type:       Buy,
-				UnitPrice:  price,
-				AccountID:  "4fe741a5-88e2-4c67-9431-8727274387c8",
-				Comment:    nil,
+		log.Printf("quant price date err: %s %s %s %s", quant, price, date, err)
+
+		payload := Payload{
+			Activities: []Activity{
+				{
+					Currency:   INR,
+					DataSource: Yahoo,
+					Date:       date,
+					Fee:        0,
+					Quantity:   quant,
+					Symbol:     ticker,
+					Type:       Buy,
+					UnitPrice:  price,
+					AccountID:  "4fe741a5-88e2-4c67-9431-8727274387c8",
+					Comment:    nil,
+				},
+				// Add more activity objects here if needed
 			},
-			// Add more activity objects here if needed
-		},
+		}
+		fmt.Print(payload)
+		// status := createGhostfolioEntry(payload)
+		// fmt.Printf("Status: %d", status)
 	}
-	status := createGhostfolioEntry(payload)
-	fmt.Printf("Status: %d", status)
+
+}
+
+func getMkt(company string, mkt string) string {
+	var suffixes string
+	if mkt == "NSE" {
+		suffixes = ".NS"
+	} else {
+		suffixes = ".BO"
+	}
+	ticker := company + suffixes
+	return ticker
+}
+
+func writeProgressData(data []interface{}) (string, error) {
+	sheetName := "data-store"
+	sheetRange := "A1:B2"
+	dataRange := sheetName + "!" + sheetRange
+	creds := os.Getenv("SA_JSON")
+	sheetId := os.Getenv("SHEET_ID")
+	sheetData := [][]interface{}{{"Entry No for Error", "Error"}, data}
+	writeResp, err := writeSheetData(sheetId, dataRange, []byte(creds), sheetData)
+	fmt.Printf("%s\n", writeResp)
+	return writeResp, err
 }
 
 func createGhostfolioEntry(payload Payload) int {
