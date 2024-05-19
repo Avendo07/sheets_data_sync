@@ -36,6 +36,7 @@ type Activity struct {
 	UnitPrice  float64      `json:"unitPrice"`
 	AccountID  string       `json:"accountId"`
 	Comment    interface{}  `json:"comment,omitempty"` // Optional comment field
+	Tags       []string     `json:"tags"`
 }
 
 type Payload struct {
@@ -86,6 +87,7 @@ func main() {
 					Type:       action,
 					UnitPrice:  price,
 					AccountID:  "4fe741a5-88e2-4c67-9431-8727274387c8",
+					Tags:       []string{company},
 					Comment:    nil,
 				},
 				// Add more activity objects here if needed
