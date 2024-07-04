@@ -72,14 +72,14 @@ func main() {
 		date, err := isoDate(row[0].(string))
 		company, _ := row[1].(string)
 		mkt, _ := row[2].(string)
-		ticker := getMkt(company, mkt)
+		ticker, currency := getMkt(company, mkt)
 
 		log.Printf("quant price date err: %d %s %s %s", qty, price, date, err)
 
 		payload := Payload{
 			Activities: []Activity{
 				{
-					Currency:   INR,
+					Currency:   currency,
 					DataSource: Yahoo,
 					Date:       date,
 					Fee:        0,
@@ -105,11 +105,17 @@ func main() {
 
 }
 
-func getMkt(company string, mkt string) string {
+func getMkt(company string, mkt string) string, string {
 	var suffixes string
+	var currency string
     switch {
-        case mkt == "NSE" : suffixes = ".NS"
-        case mkt == "BSE" : suffixes = ".BO"
+        case mkt == "NSE" :
+            suffixes = ".NS"
+            currency = "INR"
+        case mkt == "BSE" :
+            suffixes = ".BO"
+            currency = "INR"
+        default: currency = "USD"
     }
 	ticker := company + suffixes
 	return ticker
