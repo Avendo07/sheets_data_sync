@@ -47,13 +47,13 @@ func main() {
 	sheetId := os.Getenv("SHEET_ID")
 	creds := os.Getenv("SA_JSON")
 	accountId := os.Getenv("GH_ACC_ID")
+	sheetName := os.Getenv("DATASHEET_NAME")
+	sheetRange, err := readProgressData()
 	// creds, err := os.ReadFile("client_secret.json")
 	/*if err != nil {
 		log.Fatalf("Unable to read credentials file: %v", err)
 	}*/
-	sheetName := os.Getenv("DATASHEET_NAME")
 	// sheetRange := os.Getenv("DATASHEET_RANGE")
-	sheetRange, err := readProgressData()
 	fmt.Printf("Sheet Range %d %s", sheetRange, err)
 	dataRange := sheetName + "!" + "A" + strconv.Itoa(sheetRange) + ":H"
 	fmt.Printf("Data Range: %s", dataRange)
