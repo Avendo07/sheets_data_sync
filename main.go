@@ -105,17 +105,17 @@ func main() {
 
 }
 
-func getMkt(company string, mkt string) string, string {
+func getMkt(company string, mkt string) (string, Currency) {
 	var suffixes string
-	var currency string
+	var currency Currency
     switch {
         case mkt == "NSE" :
             suffixes = ".NS"
-            currency = "INR"
+            currency = INR
         case mkt == "BSE" :
             suffixes = ".BO"
-            currency = "INR"
-        default: currency = "USD"
+            currency = INR
+        default: currency = USD
     }
 	ticker := company + suffixes
 	return ticker, currency
