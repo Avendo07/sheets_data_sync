@@ -118,7 +118,7 @@ func getMkt(company string, mkt string) string, string {
         default: currency = "USD"
     }
 	ticker := company + suffixes
-	return ticker
+	return ticker, currency
 }
 
 func getAction(buyQty int, sellQty int) (ActivityType, int) {
