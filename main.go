@@ -107,11 +107,10 @@ func main() {
 
 func getMkt(company string, mkt string) string {
 	var suffixes string
-	if mkt == "NSE" {
-		suffixes = ".NS"
-	} else {
-		suffixes = ".BO"
-	}
+    switch {
+        case mkt == "NSE" : suffixes = ".NS"
+        case mkt == "BSE" : suffixes = ".BO"
+    }
 	ticker := company + suffixes
 	return ticker
 }
