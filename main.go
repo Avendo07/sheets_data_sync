@@ -46,6 +46,7 @@ type Payload struct {
 func main() {
 	sheetId := os.Getenv("SHEET_ID")
 	creds := os.Getenv("SA_JSON")
+	accountId := os.Getenv("GH_ACC_ID")
 	// creds, err := os.ReadFile("client_secret.json")
 	/*if err != nil {
 		log.Fatalf("Unable to read credentials file: %v", err)
@@ -86,7 +87,7 @@ func main() {
 					Symbol:     ticker,
 					Type:       action,
 					UnitPrice:  price,
-					AccountID:  "4fe741a5-88e2-4c67-9431-8727274387c8",
+					AccountID:  accountId,
 					Tags:       []string{company},
 					Comment:    nil,
 				},
