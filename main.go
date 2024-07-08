@@ -11,7 +11,6 @@ import (
 
 type Currency string
 type DataSource string
-type ActivityType string
 
 const (
 	USD Currency = "USD"
@@ -20,17 +19,13 @@ const (
 const (
 	Yahoo DataSource = "YAHOO"
 )
-const (
-	Buy  ActivityType = "BUY"
-	Sell ActivityType = "SELL"
-)
 
 type Activity struct {
 	Currency   Currency     `json:"currency"`
 	DataSource DataSource   `json:"dataSource"`
 	Date       string       `json:"date"`
 	Fee        int          `json:"fee"`
-	Quantity   int          `json:"quantity"`
+	Quantity   float64      `json:"quantity"`
 	Symbol     string       `json:"symbol"`
 	Type       ActivityType `json:"type"`
 	UnitPrice  float64      `json:"unitPrice"`
@@ -43,17 +38,22 @@ type Payload struct {
 	Activities []Activity `json:"activities"`
 }
 
+/* type EquityTransaction interface {                       //TODO: Implement interface or modules
+    CreateActivity() Activity
+} */
+
 func main() {
 	sheetId := os.Getenv("SHEET_ID")
 	creds := os.Getenv("SA_JSON")
 	accountId := os.Getenv("GH_ACC_ID")
 	sheetName := os.Getenv("DATASHEET_NAME")
+	equityType := os.Getenv("EQUITYTYPE") //TODO: Move out of here
 	sheetRange, err := readProgressData()
-	// creds, err := os.ReadFile("client_secret.json")
+	// creds, err := os.ReadFile("client_secret.json")                      //This is to emulate without env variables
 	/*if err != nil {
 		log.Fatalf("Unable to read credentials file: %v", err)
 	}*/
-	// sheetRange := os.Getenv("DATASHEET_RANGE")
+	// sheetRange := os.Getenv("DATASHEET_RANGE")                           //Emulate a dynamic sheet range
 	fmt.Printf("Sheet Range %d %s", sheetRange, err)
 	dataRange := sheetName + "!" + "A" + strconv.Itoa(sheetRange) + ":H"
 	fmt.Printf("Data Range: %s", dataRange)
@@ -61,36 +61,22 @@ func main() {
 	fmt.Printf("Helllo %s %s\n", sheetId, dataRange)
 	resp, err := readSheetData(sheetId, dataRange, []byte(creds))
 	log.Printf("%s %s", resp, err)
-	// entries, err := mapDataToPayload(resp.Values)
 	startPoint, err := readProgressData()
 
 	for index, row := range resp.Values {
-		buyQty, err := strconv.Atoi(row[5].(string))
-		sellQty, err := strconv.Atoi(row[6].(string))
-		action, qty := getAction(buyQty, sellQty)
-		price, err := strconv.ParseFloat(row[4].(string), 64)
-		date, err := isoDate(row[0].(string))
-		company, _ := row[1].(string)
-		mkt, _ := row[2].(string)
-		ticker, currency := getMkt(company, mkt)
+		// 	    transaction EquityTransaction;
+		var activity Activity
 
-		log.Printf("quant price date err: %d %s %s %s", qty, price, date, err)
+		switch equityType {
+		case "IND":
+			activity = CreateIndEqActivity(row, accountId)
+		case "US":
+			activity = CreateIndEqActivity(row, accountId)
+		}
 
 		payload := Payload{
 			Activities: []Activity{
-				{
-					Currency:   currency,
-					DataSource: Yahoo,
-					Date:       date,
-					Fee:        0,
-					Quantity:   qty,
-					Symbol:     ticker,
-					Type:       action,
-					UnitPrice:  price,
-					AccountID:  accountId,
-					Tags:       []string{company},
-					Comment:    nil,
-				},
+				activity,
 				// Add more activity objects here if needed
 			},
 		}
@@ -101,31 +87,6 @@ func main() {
 		}
 		fmt.Printf("Status: %d", status)
 		writeProgressData([]interface{}{startPoint + index + 1, status})
-	}
-
-}
-
-func getMkt(company string, mkt string) (string, Currency) {
-	var suffixes string
-	var currency Currency
-    switch {
-        case mkt == "NSE" :
-            suffixes = ".NS"
-            currency = INR
-        case mkt == "BSE" :
-            suffixes = ".BO"
-            currency = INR
-        default: currency = USD
-    }
-	ticker := company + suffixes
-	return ticker, currency
-}
-
-func getAction(buyQty int, sellQty int) (ActivityType, int) {
-	if buyQty != 0 && sellQty == 0 {
-		return Buy, buyQty
-	} else {
-		return Sell, sellQty
 	}
 }
 

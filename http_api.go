@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"fmt"
 	"net/http"
 )
 
@@ -19,6 +20,7 @@ func postCall(url string, payload []byte, headers map[string]string) (int, error
 		panic(err)
 	}
 	defer res.Body.Close()
+	fmt.Printf("Debug Post Call Status: %f", res.Body)
 
 	return res.StatusCode, nil
 }
