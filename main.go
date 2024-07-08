@@ -6,7 +6,6 @@ import (
 	"log"
 	"os"
 	"strconv"
-	"time"
 )
 
 type Currency string
@@ -24,7 +23,7 @@ type Activity struct {
 	Currency   Currency     `json:"currency"`
 	DataSource DataSource   `json:"dataSource"`
 	Date       string       `json:"date"`
-	Fee        int          `json:"fee"`
+	Fee        float64      `json:"fee"`
 	Quantity   float64      `json:"quantity"`
 	Symbol     string       `json:"symbol"`
 	Type       ActivityType `json:"type"`
@@ -71,6 +70,8 @@ func main() {
 		case "IND":
 			activity = CreateIndEqActivity(row, accountId)
 		case "US":
+			activity = CreateUSEqActivity(row, accountId)
+		default:
 			activity = CreateIndEqActivity(row, accountId)
 		}
 
@@ -121,21 +122,6 @@ func createGhostfolioEntry(payload Payload) int {
 	status, err := postCall("http://ghostfolio.ghostfolio.svc.cluster.local:3333/api/v1/import", []byte(json), headers)
 	fmt.Printf("%d   %s\n", status, err)
 	return status
-}
-
-func isoDate(date string) (string, error) {
-	layout := "02-01-06" // YYYY-MM-DD format
-	parsedDate, err := time.Parse(layout, date)
-
-	// Handle potential parsing errors
-	if err != nil {
-		fmt.Println("Error parsing date:", err)
-		return "", err
-	}
-
-	// Format the parsed date into ISO8601 format
-	isoFormattedDate := parsedDate.Format(time.RFC3339)
-	return isoFormattedDate, nil
 }
 
 /*func mapDataToPayload(data [][]interface{}) (Payload, error) {

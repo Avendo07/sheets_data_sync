@@ -1,8 +1,10 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"strconv"
+	"time"
 )
 
 /*
@@ -41,7 +43,7 @@ func CreateIndEqActivity(sheetRow []interface{}, accountId string) Activity {
 	ticker, currency := getTicker(company, mkt)
 	action, qty := getAction(buyQuantity, sellQuantity)
 
-	log.Printf("quant price date err: %d %s %s %s", qty, unitPrice, date, err)
+	log.Printf("quant price date err: %f %f %s %s", qty, unitPrice, date, err)
 
 	return Activity{
 		Currency:   currency,
@@ -81,4 +83,19 @@ func getAction(buyQty float64, sellQty float64) (ActivityType, float64) {
 	} else {
 		return Sell, sellQty
 	}
+}
+
+func isoDate(date string) (string, error) {
+	layout := "02-01-06" // YYYY-MM-DD format
+	parsedDate, err := time.Parse(layout, date)
+
+	// Handle potential parsing errors
+	if err != nil {
+		fmt.Println("Error parsing date:", err)
+		return "", err
+	}
+
+	// Format the parsed date into ISO8601 format
+	isoFormattedDate := parsedDate.Format(time.RFC3339)
+	return isoFormattedDate, nil
 }
