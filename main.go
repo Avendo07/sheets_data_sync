@@ -54,7 +54,7 @@ func main() {
 	}*/
 	// sheetRange := os.Getenv("DATASHEET_RANGE")                           //Emulate a dynamic sheet range
 	fmt.Printf("Sheet Range %d %s", sheetRange, err)
-	dataRange := sheetName + "!" + "A" + strconv.Itoa(sheetRange) + ":H"
+	dataRange := sheetName + "!" + "A" + strconv.Itoa(sheetRange) + ":I"
 	fmt.Printf("Data Range: %s", dataRange)
 	fmt.Printf("Helo\n")
 	fmt.Printf("Helllo %s %s\n", sheetId, dataRange)
