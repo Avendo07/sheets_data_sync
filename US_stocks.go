@@ -54,7 +54,7 @@ func CreateUSEqActivity(sheetRow []interface{}, accountId string) Activity {
 }
 
 func isoTimeStamp(date string) (string, error) {
-	layout := "02 Jan 2006, 03:04 AM" // YYYY-MM-DD format
+	layout := "02 Jan 2006, 03:04 PM" // YYYY-MM-DD format
 	parsedDate, err := time.Parse(layout, date)
 
 	// Handle potential parsing errors
