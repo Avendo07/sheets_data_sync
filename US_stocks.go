@@ -55,23 +55,19 @@ func CreateUSEqActivity(sheetRow []interface{}, accountId string) Activity {
 
 func isoTimeStamp(date string) (string, error) {
 	layout := "02 Jan 2006, 03:04 PM" // YYYY-MM-DD format
-	parsedDate, err := time.Parse(layout, date)
-
-	// Handle potential parsing errors
-	if err != nil {
-		fmt.Println("Error parsing date:", err)
-		return "", err
-	}
-
 	istLocation, err := time.LoadLocation("Asia/Kolkata")
 	if err != nil {
 		fmt.Println("Error loading location:", err)
 		return "", err
 	}
-	istTime := parsedDate.In(istLocation)
 
+	parsedDate, err := time.ParseInLocation(layout, date, istLocation)
+	if err != nil {
+		fmt.Println("Error parsing date:", err)
+		return "", err
+	}
 	// Format the parsed date into ISO8601 format
-	isoFormattedDate := istTime.Format(time.RFC3339)
+	isoFormattedDate := parsedDate.Format(time.RFC3339)
 	return isoFormattedDate, nil
 }
 
