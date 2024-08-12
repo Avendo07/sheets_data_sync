@@ -63,8 +63,15 @@ func isoTimeStamp(date string) (string, error) {
 		return "", err
 	}
 
+	istLocation, err := time.LoadLocation("Asia/Kolkata")
+	if err != nil {
+		fmt.Println("Error loading location:", err)
+		return "", err
+	}
+	istTime := parsedDate.In(istLocation)
+
 	// Format the parsed date into ISO8601 format
-	isoFormattedDate := parsedDate.Format(time.RFC3339)
+	isoFormattedDate := istTime.Format(time.RFC3339)
 	return isoFormattedDate, nil
 }
 
