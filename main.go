@@ -53,13 +53,13 @@ func main() {
 		log.Fatalf("Unable to read credentials file: %v", err)
 	}*/
 	// sheetRange := os.Getenv("DATASHEET_RANGE")                           //Emulate a dynamic sheet range
-	fmt.Printf("Sheet Range %d %s", sheetRange, err)
+	fmt.Printf("Sheet Range %d %s\n", sheetRange, err)
 	dataRange := sheetName + "!" + "A" + strconv.Itoa(sheetRange) + ":I"
-	fmt.Printf("Data Range: %s", dataRange)
+	fmt.Printf("Data Range: %s\n", dataRange)
 	fmt.Printf("Helo\n")
 	fmt.Printf("Helllo %s %s\n", sheetId, dataRange)
 	resp, err := readSheetData(sheetId, dataRange, []byte(creds))
-	log.Printf("%s %s", resp, err)
+	log.Printf("%s %s\n", resp, err)
 	startPoint, err := readProgressData()
 
 	for index, row := range resp.Values {
@@ -116,7 +116,7 @@ func readProgressData() (int, error) {
 }
 
 func createGhostfolioEntry(payload Payload) int {
-	log.Printf("Payload : %s", payload)
+	log.Printf("Payload : %s\n", payload)
 	json, err := json.Marshal(payload)
 	headers := map[string]string{"Content-Type": "application/json", "Authorization": "Bearer " + os.Getenv("API_JWT")}
 	status, err := postCall("http://ghostfolio.ghostfolio.svc.cluster.local:3333/api/v1/import", []byte(json), headers)

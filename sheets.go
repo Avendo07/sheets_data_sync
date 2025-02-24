@@ -46,7 +46,7 @@ func writeSheetData(sheetId string, dataRange string, creds []byte, rowData [][]
 		log.Fatalf("Unable to add data to google sheets service: %v", err)
 		return "", err
 	}
-	fmt.Printf(resp.UpdatedRange)
+	fmt.Println(resp.UpdatedRange)
 	return resp.UpdatedRange, nil
 }
 

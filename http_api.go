@@ -20,7 +20,7 @@ func postCall(url string, payload []byte, headers map[string]string) (int, error
 		panic(err)
 	}
 	defer res.Body.Close()
-	fmt.Printf("Debug Post Call Status: %f", res.Body)
+	fmt.Printf("Debug Post Call Status: %s\n", res.Body)
 
 	return res.StatusCode, nil
 }

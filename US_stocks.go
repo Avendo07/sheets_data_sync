@@ -36,7 +36,7 @@ func CreateUSEqActivity(sheetRow []interface{}, accountId string) Activity {
 	action := getUSAction(sheetRow[6].(string))
 	fee, err := strconv.ParseFloat(sheetRow[8].(string), 64)
 
-	log.Printf("quant price date err: %f %f %f %s %s", quantity, unitPrice, fee, date, err)
+	log.Printf("quant price date err: %f %f %f %s %s\n", quantity, unitPrice, fee, date, err)
 
 	return Activity{
 		Currency:   USD,

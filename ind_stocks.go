@@ -43,7 +43,7 @@ func CreateIndEqActivity(sheetRow []interface{}, accountId string) Activity {
 	ticker, currency := getTicker(company, mkt)
 	action, qty := getAction(buyQuantity, sellQuantity)
 
-	log.Printf("quant price date err: %f %f %s %s", qty, unitPrice, date, err)
+	log.Printf("quant price date err: %f %f %s %s\n", qty, unitPrice, date, err)
 
 	return Activity{
 		Currency:   currency,
