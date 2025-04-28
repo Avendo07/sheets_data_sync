@@ -1,0 +1,12 @@
+{
+  "packages": [],
+  "env": {},
+  "shell": {
+    "init_hook": [
+      "git config user.name \"Avendo07\"",
+      "git config user.email \"namankaushikplt@gmail.com\""
+    ],
+    "scripts": {}
+  },
+  "include": []
+}
