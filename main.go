@@ -71,6 +71,8 @@ func main() {
 			activity = CreateIndEqActivity(row, accountId)
 		case "US":
 			activity = CreateUSEqActivity(row, accountId)
+		case "MF":
+			activity = CreateMFActivity(row, accountId)
 		default:
 			activity = CreateIndEqActivity(row, accountId)
 		}

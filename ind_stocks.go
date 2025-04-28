@@ -86,7 +86,7 @@ func getAction(buyQty float64, sellQty float64) (ActivityType, float64) {
 }
 
 func isoDate(date string) (string, error) {
-	layout := "02-01-06" // YYYY-MM-DD format
+	layout := "02-01-06"
 
 	istLocation, err := time.LoadLocation("Asia/Kolkata")
 	if err != nil {

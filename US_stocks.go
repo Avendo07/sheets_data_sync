@@ -54,7 +54,7 @@ func CreateUSEqActivity(sheetRow []interface{}, accountId string) Activity {
 }
 
 func isoTimeStamp(date string) (string, error) {
-	layout := "02 Jan 2006, 03:04 PM" // YYYY-MM-DD format
+	layout := "02 Jan 2006, 03:04 PM"
 	istLocation, err := time.LoadLocation("Asia/Kolkata")
 	if err != nil {
 		fmt.Println("Error loading location:", err)
