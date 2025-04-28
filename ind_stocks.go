@@ -25,13 +25,6 @@ type struct USEquity{
 }
 */
 
-type ActivityType string
-
-const (
-	Buy  ActivityType = "BUY"
-	Sell ActivityType = "SELL"
-)
-
 func CreateIndEqActivity(sheetRow []interface{}, accountId string) Activity {
 	company, _ := sheetRow[1].(string)
 	mkt, _ := sheetRow[2].(string)
