@@ -30,10 +30,10 @@ func CreateMFActivity(sheetRow []interface{}, accountId string) Activity {
 // 	mkt, _ := sheetRow[2].(string)
 
 	navDate, err := getNavDate(sheetRow[0].(string))
-	nav, err := strconv.ParseFloat(sheetRow[2].(string), 64)
-	quantity, err := strconv.ParseFloat(sheetRow[3].(string), 64) //TODO: This is to maintain compaitability with US Eq
-    action := getUSAction(sheetRow[4].(string))
-    fee, err := strconv.ParseFloat(sheetRow[5].(string), 64)
+	nav, err := strconv.ParseFloat(sheetRow[3].(string), 64)
+	quantity, err := strconv.ParseFloat(sheetRow[4].(string), 64) //TODO: This is to maintain compaitability with US Eq
+    action := getUSAction(sheetRow[5].(string))
+    fee, err := strconv.ParseFloat(sheetRow[6].(string), 64)
 
 	log.Printf("quant price date err: %f %f %f %s %s\n", quantity, nav, fee, navDate, err)
 
