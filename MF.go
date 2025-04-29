@@ -26,7 +26,7 @@ type struct USEquity{
 */
 
 func CreateMFActivity(sheetRow []interface{}, accountId string) Activity {
-	mf_name, _ := sheetRow[1].(string)
+	mf_name, _ := sheetRow[2].(string)
 // 	mkt, _ := sheetRow[2].(string)
 
 	navDate, err := getNavDate(sheetRow[0].(string))
