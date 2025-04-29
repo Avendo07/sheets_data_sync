@@ -29,6 +29,7 @@ import (
 )
 
 func CreateUSEqActivity(sheetRow []interface{}, accountId string) Activity {
+	print("Adding US Equity Activity")
 	ticker := sheetRow[1].(string)
 	date, err := isoTimeStamp(sheetRow[0].(string))
 	unitPrice, err := strconv.ParseFloat(sheetRow[4].(string), 64)

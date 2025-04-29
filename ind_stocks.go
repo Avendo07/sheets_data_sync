@@ -26,6 +26,7 @@ type struct USEquity{
 */
 
 func CreateIndEqActivity(sheetRow []interface{}, accountId string) Activity {
+	print("Adding IND Equity Activity")
 	company, _ := sheetRow[1].(string)
 	mkt, _ := sheetRow[2].(string)
 

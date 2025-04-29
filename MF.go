@@ -26,6 +26,7 @@ type struct USEquity{
 */
 
 func CreateMFActivity(sheetRow []interface{}, accountId string) Activity {
+	print("Adding MF Activity")
 	mf_name, _ := sheetRow[2].(string)
 // 	mkt, _ := sheetRow[2].(string)
 
@@ -35,10 +36,10 @@ func CreateMFActivity(sheetRow []interface{}, accountId string) Activity {
     action := getUSAction(sheetRow[5].(string))
     fee, err := strconv.ParseFloat(sheetRow[6].(string), 64)
 
-	log.Printf("quant price date err: %f %f %f %s %s\n", quantity, nav, fee, navDate, err)
+	log.Printf("action quant nav fee date err: %f %f %f %s %s\n", action, quantity, nav, fee, navDate, err)
 
     return Activity{
-        Currency:   USD,
+        Currency:   INR,
         DataSource: Yahoo,
         Date:       navDate,
         Fee:        fee,
