@@ -86,6 +86,7 @@ func main() {
 		fmt.Print(payload)
 		status := createGhostfolioEntry(payload)
 		if status != 201 {
+			fmt.Printf("Status: %d", status)
 			break
 		}
 		fmt.Printf("Status: %d", status)
