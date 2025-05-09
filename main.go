@@ -71,7 +71,7 @@ func main() {
 			activity = CreateIndEqActivity(row, accountId)
 		case "US":
 			activity = CreateUSEqActivity(row, accountId)
-		case "MF":
+		case "MF", "ELSS", "US-MF": // Arrange them all in MF by passing accounts using maps, Is it a good pattern?
 			activity = CreateMFActivity(row, accountId)
 		default:
 			activity = CreateIndEqActivity(row, accountId)
