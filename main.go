@@ -47,6 +47,7 @@ func main() {
 	accountId := os.Getenv("GH_ACC_ID")
 	sheetName := os.Getenv("DATASHEET_NAME")
 	equityType := os.Getenv("EQUITYTYPE") //TODO: Move out of here
+	dataStoreSheetName := os.Getenv("DATASTORE")
 	sheetRange, err := readProgressData()
 	// creds, err := os.ReadFile("client_secret.json")                      //This is to emulate without env variables
 	/*if err != nil {
@@ -60,7 +61,7 @@ func main() {
 	fmt.Printf("Helllo %s %s\n", sheetId, dataRange)
 	resp, err := readSheetData(sheetId, dataRange, []byte(creds))
 	log.Printf("%s %s\n", resp, err)
-	startPoint, err := readProgressData()
+	startPoint, err := readProgressData(dataStoreSheetName)
 
 	for index, row := range resp.Values {
 		// 	    transaction EquityTransaction;
@@ -90,12 +91,12 @@ func main() {
 			break
 		}
 		fmt.Printf("Status: %d", status)
-		writeProgressData([]interface{}{startPoint + index + 1, status})
+		writeProgressData([]interface{}{startPoint + index + 1, status}, dataStoreSheetName)
 	}
 }
 
-func writeProgressData(data []interface{}) (string, error) {
-	sheetName := "data-store"
+func writeProgressData(data []interface{}, dataStoreTarget string) (string, error) {
+	sheetName := dataStoreTarget
 	sheetRange := "A1:B2"
 	dataRange := sheetName + "!" + sheetRange
 	creds := os.Getenv("SA_JSON")
@@ -106,8 +107,8 @@ func writeProgressData(data []interface{}) (string, error) {
 	return writeResp, err
 }
 
-func readProgressData() (int, error) {
-	sheetName := "data-store"
+func readProgressData(dataStoreSource string) (int, error) {
+	sheetName := dataStoreSource
 	sheetRange := "A2:B2"
 	dataRange := sheetName + "!" + sheetRange
 	creds := os.Getenv("SA_JSON")
