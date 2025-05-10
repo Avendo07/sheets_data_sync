@@ -48,7 +48,7 @@ func main() {
 	sheetName := os.Getenv("DATASHEET_NAME")
 	equityType := os.Getenv("EQUITYTYPE") //TODO: Move out of here
 	dataStoreSheetName := os.Getenv("DATASTORE")
-	sheetRange, err := readProgressData()
+	sheetRange, err := readProgressData(dataStoreSheetName)
 	// creds, err := os.ReadFile("client_secret.json")                      //This is to emulate without env variables
 	/*if err != nil {
 		log.Fatalf("Unable to read credentials file: %v", err)
